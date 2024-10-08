@@ -132,7 +132,7 @@ $np->add_arg(
 $np->add_arg(
     spec => 'resourceappid|i=s', 
     help => "-i, --resourceappid=STRING\n"  
-         . '   Ressource app Id of the app registration let this empty to get all secret expiration',
+         . '   Ressource app Id used by the app registration let this empty to get all secret expiration',
     required => 0
 );
 $np->add_arg(
