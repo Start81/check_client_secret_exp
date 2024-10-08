@@ -49,7 +49,7 @@ Usage: check_client_secret_exp.pl  [-v] -T <TENANTID> -I <CLIENTID> -p <CLIENTSE
  -N, --appname=STRING
    name of the app registration let this empty to get all secret expiration
  -i, --resourceappid=STRING
-   Ressource app Id of the app registration let this empty to get all secret expiration
+   Ressource app Id used by the app registration let this empty to get all secret expiration
  -w, --warning=threshold
    See https://www.monitoring-plugins.org/doc/guidelines.html#THRESHOLDFORMAT for the threshold format.
  -c, --critical=threshold
