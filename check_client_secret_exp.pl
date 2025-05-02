@@ -14,7 +14,7 @@
 #       [*] Informational, [!] Bugix, [+] Added, [-] Removed
 # - 03/06/2024 | 1.0.0 | [*] initial realease
 # - 13/06/2024 | 1.0.1 | [*] Improve return when APPNAME not found or RESSOURCEAPPID not found
-# - 13/06/2024 | 1.0.1 | [*] Improve Token management
+# - 02/05/2025 | 1.0.2 | [*] Improve Token management
 #===============================================================================
 use REST::Client;
 use Data::Dumper;
