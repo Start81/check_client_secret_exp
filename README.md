@@ -63,7 +63,7 @@ Usage: check_client_secret_exp.pl  [-v] -T <TENANTID> -I <CLIENTID> -p <CLIENTSE
 sample : 
 
 ```bash
-perl  -T <TENANTID> -I <CLIENTID> -p <CLIENTID> -N <APPNAME> -w @0:30 -c @0:30
+perl check_client_secret_exp.pl -T <TENANTID> -I <CLIENTID> -p <CLIENTID> -N <APPNAME> -w @0:30 -c @0:30
 ```
 
 you may get :
