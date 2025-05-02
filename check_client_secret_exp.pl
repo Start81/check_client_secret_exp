@@ -3,7 +3,7 @@
 # Script Name   : check_client_secret_exp.pl
 # Usage Syntax  : check_client_secret_exp.pl [-v] -T <TENANTID> -I <CLIENTID> -p <CLIENTSECRET>   [-N <APPNAME>] [-i <RESSOURCEAPPID>] [-w <WARNING>] [-c <CRITICAL>] 
 # Author        : DESMAREST JULIEN (Start81)
-# Version       : 1.0.1
+# Version       : 1.0.2
 # Last Modified : 13/06/2024 
 # Modified By   : DESMAREST JULIEN (Start81)
 # Description   : check app registration secret key expiration
@@ -14,7 +14,7 @@
 #       [*] Informational, [!] Bugix, [+] Added, [-] Removed
 # - 03/06/2024 | 1.0.0 | [*] initial realease
 # - 13/06/2024 | 1.0.1 | [*] Improve return when APPNAME not found or RESSOURCEAPPID not found
-# 
+# - 13/06/2024 | 1.0.1 | [*] Improve Token management
 #===============================================================================
 use REST::Client;
 use Data::Dumper;
@@ -27,7 +27,7 @@ use warnings;
 use Readonly;
 use Monitoring::Plugin;
 use URI::Encode;
-Readonly our $VERSION => '1.0.1';
+Readonly our $VERSION => '1.0.2';
 my $graph_endpoint = "https://graph.microsoft.com";
 my @apps_name = ();
 my @criticals = ();
@@ -60,7 +60,6 @@ sub write_file {
         my $msg ="unable to write file $tmp_file_name";
         $np->plugin_exit('UNKNOWN',$msg);
     }
-    
     return 0
 }
 
@@ -182,13 +181,13 @@ if (-e $tmp_file) {
     if ($current_time > $expiration ) {
         #get a new token
         $token = get_access_token($clientid,$clientsecret,$tenantid);
-        write_file($token,$tmp_file);
         $token_json = from_json($token);
+        write_file($token,$tmp_file);
     }
 } else {
     $token = get_access_token($clientid,$clientsecret,$tenantid);
-    write_file($token,$tmp_file);
     $token_json = from_json($token);
+    write_file($token,$tmp_file);
 }
 verb(Dumper($token_json ));
 $token = $token_json->{'access_token'};
@@ -210,7 +209,6 @@ my $resourceappid_founded = 0;
 my $app_founded = 0;
 do {
     $resourceappid_founded = 0;
-    
     if (!$o_resourceappid){
         $resourceappid_founded=1;
     }else{
@@ -224,7 +222,6 @@ do {
                 $k++; 
             } while ((exists $apps_list->{'value'}->[$i]->{'requiredResourceAccess'}->[$k]) and (!$resourceappid_founded));
         };
-
     } ;    
     my $app_name = $apps_list->{'value'}->[$i]->{'displayName'};
     verb("app_name  $app_name");
@@ -281,8 +278,6 @@ do {
                 $y++;
             } while (exists $apps_list->{'value'}->[$i]->{'passwordCredentials'}->[$y]);
         }
-        
-
     } else {
         push(@apps_name,$app_name);
     }
@@ -299,7 +294,6 @@ if ($o_resourceappid){
         $msg = "RessourceAppId  " . $o_resourceappid . " not found";
         $np->plugin_exit('UNKNOWN',$msg);
     }
-
 }
 $np->plugin_exit('CRITICAL', join(', ', @criticals)) if (scalar @criticals > 0);
 $np->plugin_exit('WARNING', join(', ', @warnings)) if (scalar @warnings > 0);
